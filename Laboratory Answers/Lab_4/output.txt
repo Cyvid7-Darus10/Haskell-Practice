@@ -1,0 +1,37 @@
+--- Pairs that are Enemies ---
+X = missScarlet, Y = revGreen ;
+X = revGreen, Y = missScarlet ;
+X = profPlum, Y = mrsWhite ;
+X = mrsWhite, Y = profPlum ;
+
+--- Pairs that are Friends ---
+X = mrsPeacock, Y = drOrchid ;
+X = drOrchid, Y = mrsPeacock ;
+X = missScarlet, Y = profPlum ;
+X = missScarlet, Y = profPlum ;
+X = profPlum, Y = missScarlet ;
+X = profPlum, Y = missScarlet ;
+X = Y, Y = profPlum ;
+X = Y, Y = missScarlet ;
+X = Y, Y = revGreen ;
+X = Y, Y = profPlum ;
+X = Y, Y = mrsWhite ;
+
+
+--- People that are liked by Professor Plum ---
+X = missScarlet ;
+X = missScarlet ;
+X = mrsWhite ;
+X = mrsPeacock ;
+X = drOrchid ;
+X = profPlum ;
+
+--- People that like themselves ---
+X = profPlum ;
+
+--- Males that are liked by females ---
+X = missScarlet, Y = profPlum ;
+
+--- People that are hated by the one they like ---
+X = profPlum, Y = mrsWhite ;
+
