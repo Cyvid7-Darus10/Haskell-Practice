@@ -1,3 +1,5 @@
+from math import sqrt
+
 '''
   --------Lab Exercise 5 (Snakes)-------
   Name: Cyrus David G. Pastelero
@@ -6,22 +8,17 @@
   Date: Nov 5, 2020
   -------------------------------------
 '''
-from math import sqrt
 
-#def doubledInt(x:int) -> int:
-def doubleInt(x):
+def doubledInt(x:int) -> int:
     return x * 2
 
-#def largest(x:float,y:float) -> float:
-def largest(x, y):
+def largest(x:float,y:float) -> float:
     return x if x > y else y
 
-#def isVertical(a:(float,float),b:(float,float)) -> bool:
-def isVertical(a, b):
+def isVertical(a:(float,float),b:(float,float)) -> bool:
     return True if a[0] == b[0] and a[1] != b[1] else False
 
-#def primes(n:int) -> [int]:
-def primes(n):
+def primes(n:int) -> [int]:
     ans = []
     curr = 2
     while (len(ans) <= n):
@@ -33,15 +30,13 @@ def primes(n):
         curr += 1
     return ans
 
-#def fibonacciSequence(n:int) -> [int]:
-def fbonacciSequence(n):
+def fibonacciSequence(n:int) -> [int]:
     fib = [0, 1]
     while (len(fib) <= n):
         fib.append(fib[-2] + fib[-1])
     return fib
 
-#def sortedIntegers(l:[int]) -> [int]:
-def sortedIntegers(l):
+def sortedIntegers(l:[int]) -> [int]:
     for i in range(len(l)):
         min = i
         for x in range(i + 1, len(l)):
@@ -50,16 +45,14 @@ def sortedIntegers(l):
         l[i], l[min] = l[min], l[i]
     return l
 
-#def sublists(l:[int]) -> [[int]]:
-def sublists(l):
+def sublists(l:[int]) -> [[int]]:
     subl = [[]]
     for i in range(len(l) + 1):
         for j in range(i + 1, len(l) + 1):
             subl.append(l[i:j])
     return subl
 
-#def fme(b:int,p:int,m:int) -> int:
-def fme(b, p, m):
+def fme(b:int,p:int,m:int) -> int:
     ans = 1
     while p:
         if p & 1: #if the last digit of binary form p is 1
@@ -72,7 +65,7 @@ def fme(b, p, m):
 
 def main():
     #1
-    print("Number 1: double of {} is {}".format(2, doubleInt(2)))
+    print("Number 1: double of {} is {}".format(2, doubledInt(2)))
 
     #2
     print("Number 2: largest between {} and {} is {}".format(4.3, 4.2, largest(4.3, 4.2)))
@@ -88,7 +81,7 @@ def main():
     print("Number 4: First 10 primes are {}".format(primes(10)))
 
     #5
-    print("Number 5: First 10 fiboncci sequence are {}".format(fbonacciSequence(10)))
+    print("Number 5: First 10 fiboncci sequence are {}".format(fibonacciSequence(10)))
 
     #6
     print("Number 6: The sorted list of {} is {}".format([1,2,0,-3,23,1,4,5,9], sortedIntegers([1,2,0,-3,23,1,4,5,9])))
