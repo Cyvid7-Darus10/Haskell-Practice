@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 '''
 
 class Date:
-    def __init__(self, month:int, day:int, year:int):
+    def __init__(self, month: int, day: int, year: int):
         self.__month = month
         self.__day = day
         self.__year = year
@@ -20,8 +20,8 @@ class Date:
                 + "/" + str(self.__year))
 
     def daysGap(self, today) -> int:
-        months:[int] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        days:[int] = (today.__year - self.__year)* 365
+        months: [int] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        days: int = (today.__year - self.__year)* 365
 
         for month in range(self.__month - 1, today.__month - 1):
             days += months[month]
@@ -37,37 +37,47 @@ class Card(ABC):
         self.date = date
 
     @abstractmethod
-    def withdraw(self, int) -> bool:
-        pass
-    
-    @abstractmethod
-    def accountInfo(self) -> str:
+    def withdraw(self, amount: int) -> bool:
         pass
 
     @abstractmethod
     def checkBalance(self) -> str:
         pass
 
-    def statusUpdate(self, status:bool):
-        stat = "Activated" if status else "Deactivated"
+    def accountInfo(self) -> str:
+        status: str = "Active" if self.status else "Deactivated"
+
+        if isinstance(self, Credit):
+            cType: str = "Credit"
+        elif isinstance(self, Debit):
+            cType: str = "Debit"
+        else:
+            cType: str = "Payroll"
+
+        return ("Owner: " + self.name 
+                + "\nStatus: " + status 
+                + "\nCard Type: " + cType)
+
+    def statusUpdate(self, status: bool):
+        stat: str = "Activated" if status else "Deactivated"
         if (status != self.status):
-            print ("Account Status: " + stat)
             self.status = status
+            print("Account is Succesfully " + stat)
         else:
             print ("Account is already " + stat)
 
 
 class BankOfCyrus:
-    def __init__(self, card:Card, date:Date):
-        self.accounts = {card:date}
+    def __init__(self, date: Date):
+        self.accounts = {}
         self.currentDate = date
-        card.date = date
 
     def addAccount(self, acc: Card):
-        self.accounts[acc] = self.currentDate
-        acc.date = self.currentDate
+        if acc not in self.accounts:
+            self.accounts[acc] = self.currentDate
+            acc.date = self.currentDate #register its date with bank's current date
 
-    def deleteAccount(self, acc:Card):
+    def deleteAccount(self, acc: Card):
         if acc in self.accounts:
             self.accounts.pop(acc)
     
@@ -82,7 +92,7 @@ class BankOfCyrus:
             allStat: bool = True
         else:
             print ("INVALID")
-            pass
+            return
 
         for acc in self.accounts:
             if (acc.status == stat) or allStat:
@@ -90,112 +100,89 @@ class BankOfCyrus:
                         + self.accounts[acc].mdyFormat())
                 print(acc.accountInfo() + "\n")
 
-    def updateDate(self, date:Date):
-        self.currentDate = date
+    def updateDate(self, date: Date):
+        self.currentDate = date #updates the date
         for acc in self.accounts:
             if not isinstance(acc, Payroll):
-                acc.updateStanding(date)
+                acc.updateStanding(date) #update every cards' standing
 
 
 
 class Payroll(Card):
-    def __init__(self, name:str, date:Date):
-        Card.__init__(self, name, date)
+    def __init__(self, name: str, date: Date):
+        Card.__init__(self, name, date) #inherit
         self.balance = 0
 
-    def accountInfo(self) -> str:
-        status = "Active" if self.status else "Deactivated"
-
-        return ("Owner: " + self.name 
-                + "\nStatus: " + status 
-                + "\nCard Type: Payroll")
-
-    def withdraw(self, ammount:int) -> bool:
-        if self.status:
-            if (self.balance - ammount) >= 0 and ammount != 0:
-                self.balance -= ammount
-                print ("Succesfully withdrawn: {} $".format(ammount))
-                self.checkBalance()
-                return True
-            else:
-                print ("Ammount is Invalid")
-        else:
+    def withdraw(self, amount: float):
+        if not self.status:
             print ("Your account is deactivated.")
-            return False
+        elif (self.balance - amount) < 0:
+            print ("Insufficient Funds")
+        elif (amount <= 0):
+            print ("Invalid Amount")
+        else:  
+            self.balance -= amount
+            print ("Succesfully withdrawn: {} $".format(amount))
+            self.checkBalance()
 
     def checkBalance(self):
         print ("Current Balance: {} $".format(round(self.balance, 2)))
 
     
 class Debit(Card):
-    def __init__(self, name:str, initBalance:float, version:str, date:Date):
+    def __init__(self, name: str, initBalance: float, version: str, date: Date):
         Card.__init__(self, name, date)
 
-        if version.lower() == "senior":
-            reqBalance:float = 500.0
-            interest:float = 0.01
-        elif version.lower() == "junior": 
-            reqBalance:float = 100.0
-            interest:float = 0.02
-        else:
-            reqBalance:float = 100.0
-            interest:float = 0.02
-
-        self.reqBalance = reqBalance
-        self.interest = interest
+        self.reqBalance = 1000
+        self.interest = 0.02
         self.balance = initBalance
-    
-    def accountInfo(self) -> str:
-        status = "Active" if self.status else "Deactivated"
 
-        return ("Owner: " + self.name 
-                + "\nStatus: " + status 
-                + "\nCard Type: Debit")
-
-    def withdraw(self, ammount:int) -> bool:
+    def withdraw(self, amount:int) -> bool:
         if self.status:
-            if self.balance - ammount >= 0 and ammount != 0:
-                self.balance -= ammount
-                print ("Succesfully withdrawn: {} $".format(ammount))
+            if self.balance - amount >= 0 and amount > 0:
+                self.balance -= amount
+                print ("Succesfully withdrawn: {} $".format(amount))
                 print ("Current Blanance: {} $".format(self.balance))
                 return True
             else:
-                print ("Ammount is Invalid")
+                print ("amount is Invalid")
         else:
             return False
 
-    def transfer(self, ammount:int, card:Card) -> bool:
-        if (self.status and self.balance - ammount 
-            >= 0 and card.status):
+    def transfer(self, amount: int, card: Card) -> bool:
+        if (self.status and self.balance - amount >= 0 
+            and card.status and amount > 0):
             if isinstance(card, Credit):
-                card.credit -= ammount
+                card.credit -= amount
                 if card.credit < card.limit and not card.status:
-                    card.statusUpdate(True)
+                    card.statusUpdate(True) #If deactivated, activate
             else:
-                card.balance += ammount
+                card.balance += amount
                 if isinstance(card, Debit) and not card.status:
                     if card.balance >= card.reqBalance:
-                        card.statusUpdate(True)
+                        card.statusUpdate(True) #If deactivated, activate
 
-            self.balance -= ammount
-            out = ("Successfully Transferred " + str(ammount) 
+            self.balance -= amount 
+            out: str = ("Successfully Transferred " + str(amount) 
                     + "$ to:\n"+ format(card.accountInfo()))
             print(out)
             return True
         else:
-            if self.balance - ammount < 0:
+            if self.balance - amount < 0:
                 print("Out of Limit")
             elif not self.status:
                 print("Your Account is Deactivated")
-            else:
+            elif not card.status:
                 print("The Account to Recieve is Deactivated")
+            else:
+                print("Invalid amount to Transfer")
             return False
 
     def checkBalance(self):
         return "Current Balance: " + str(self.balance) + "$"
     
-    def updateStanding(self, date:Date) -> bool:
-        months:float = self.date.daysGap(date) / 30
+    def updateStanding(self, date: Date) -> bool:
+        months: float = self.date.daysGap(date) / 30
         if (months >= 0 and self.status):
             self.date = date   #updating new date
 
@@ -203,9 +190,9 @@ class Debit(Card):
                 self.statusUpdate(False)
                 return False
 
-            newBalance = self.balance * ((1.0 + self.interest) ** months)
-            
+            newBalance: float = self.balance * ((1.0 + self.interest) ** months)
             self.balance = round(newBalance,2)
+
             return True
         else:
             return False
@@ -213,78 +200,63 @@ class Debit(Card):
 
 
 class Credit(Card):
-    def __init__(self, name:str, version:str, date:Date):
+    def __init__(self, name: str, version: str, date: Date):
         Card.__init__(self, name, date)
 
-        if version.lower() == "premium":
-            limit:int = 10000
-            interest:float = 0.01
-        if version.lower() == "regular": 
-            limit:int = 1000
-            interest:float = 0.02
-        else:
-            limit:int = 1000
-            interest:float = 0.02
-
         self.credit = 0.0
-        self.limit = limit
-        self.interest = interest
+        self.limit = 10000
+        self.interest = 0.02
 
-    def accountInfo(self) -> str:
-        status = "Active" if self.status else "Deactivated"
-
-        return ("Owner: " + self.name 
-                + "\nStatus: " + status 
-                + "\nCard Type: Credit")
-
-    def withdraw(self, ammount:int) -> bool:
+    def withdraw(self, amount: int) -> bool:
         if self.status:
-            if self.credit + ammount <= self.limit and ammount != 0:
-                self.credit += ammount
-                print ("Succesfully withdrawn: {} $".format(ammount))
+            if self.credit + amount <= self.limit and amount > 0:
+                self.credit += amount
+                print ("Succesfully withdrawn: {} $".format(amount))
                 print ("Current Credit: {} $".format(self.credit))
                 return True
             else:
-                print ("Ammount is Invalid")
+                print ("amount is Invalid")
         else:
             return False
  
-    def transfer(self, ammount:int, card:Card) -> bool:
-        if (self.status and self.credit + ammount 
-            <= self.limit and card.status):
+    def transfer(self, amount: int, card: Card) -> bool:
+        if (self.status and self.credit + amount <= self.limit
+            and card.status and amount > 0):
             if isinstance(card, Credit):
-                card.credit -= ammount
+                card.credit -= amount
                 if card.credit < card.limit and not card.status:
-                    card.statusUpdate(True)
+                    card.statusUpdate(True) #If account was deactivated, activate
             else:
-                card.balance += ammount
+                card.balance += amount
                 if isinstance(card, Debit) and not card.status:
                     if card.balance >= card.reqBalance:
-                        card.statusUpdate(True)
+                        card.statusUpdate(True) #If account was deactivated, activate
                         
-            self.credit += ammount
-            out = ("Successfully Transferred " + str(ammount) 
+            self.credit += amount #increase the credit(Debt)
+            out:str = ("Successfully Transferred " + str(amount) 
                     + "$ to:\n"+ format(card.accountInfo()))
             print(out)
             return True
         else:
-            if self.credit + ammount > self.limit:
+            if self.credit + amount > self.limit:
                 print("Out of Limit")
             elif not self.status:
                 print("Your Account is Deactivated")
-            else:
+            elif not card.status:
                 print("The Account to Recieve is Deactivated")
+            else:
+                print("Invalid amount to Transfer")
             return False
     
-    def checkBalance(self, date:Date):
+    def checkBalance(self, date: Date):
             return "Current Credit: " + str(self.credit) + "$"
     
-    def updateStanding(self, date:Date) -> bool:
-        months:float = self.date.daysGap(date) / 30
+    def updateStanding(self, date: Date) -> bool:
+        months: float = self.date.daysGap(date) / 30
         if (months >= 0 and self.status):
             self.date = date   #updating new date
             
-            newCredit:float = self.credit * ((1.0 + self.interest) ** months)
+            newCredit: float = self.credit * ((1.0 + self.interest) ** months)
             
             self.credit = round(newCredit, 2)
             if self.credit > self.limit:
@@ -304,7 +276,8 @@ print(card1.date.mdyFormat()) #The date he made his account
 
 print("\n")
 #A banking busines has arised and person 1 is the first costumer
-CDP: BankOfCyrus = BankOfCyrus(card1, Date(1,2,2020))
+CDP: BankOfCyrus = BankOfCyrus(Date(1,2,2020))
+CDP.addAccount(card1)
 CDP.addAccount(card2) #person two registered his account to the new bank
 CDP.addAccount(card3) #persone three followed
 CDP.listAccounts("All") #List all current bank's costumer
@@ -331,16 +304,17 @@ card1.withdraw(100)
 
 print("\n" + card3.accountInfo())
 card3.withdraw(100)
-print("After one year:")
-card3.checkBalance()
-card3.checkBalance()
-print(card3.transfer(120, card1))
-card3.checkBalance()
 
-print("\n" + card1.accountInfo())
-card1.checkBalance()
-card1.withdraw(100)
+print("\nAfter one year:\n")
+CDP.updateDate(Date(1,2,2021)) #One year has passed
+CDP.addAccount(card4) #new account
+CDP.addAccount(card5) #new account
+card1.statusUpdate(False) # Deactivate person 1
+print("\n")
 
+# CDP.listAccounts("inactive")
 
-print("\nAfter one year:")
-CDP.updateDate(Date(1,2,2022)) #One year has passed
+CDP.listAccounts("active")
+
+card1.statusUpdate(True) # Activate person 1 again
+CDP.listAccounts("sdkjhal") # wrong specification
