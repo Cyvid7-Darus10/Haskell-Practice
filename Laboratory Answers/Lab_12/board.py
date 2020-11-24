@@ -15,10 +15,14 @@ class Board:
 
         self.__cLoc = self.__start
 
-
-
     def characterLocation(self):
         return self.__cLoc
+
+    def startingPoint(self):  #creatd for gaming purposes
+        return self.__start
+
+    def endPoint(self):     #creatd for gaming purposes
+        return self.__end
 
     def moveRight(self):
         (row,col) = self.__cLoc
@@ -100,7 +104,6 @@ class Board:
         except IndexError:
             return False
 
-
     def __str__(self):
         mapString = ""
         for row in range(len(self.__isSolid)):
@@ -122,12 +125,3 @@ class Board:
             raise BoundaryCollisionError((row,col))
         else:
             self.__cLoc = newLocation
-
-
-
-
-#to test if board works, uncomment the following
-#b = Board("boardfile.in")
-#print(b)
-#b.moveRight()
-#print(b)
