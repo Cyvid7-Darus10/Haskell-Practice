@@ -121,17 +121,15 @@ def main():
         12, MyBTree(11, left=MyBTree(10)), MyBTree(14)))
 
 #The Binary Tree
-    """
-             10
-            /  \
-           /    \ 
-          3     12
-           \    / \  
-            4  11  14
-              /
-            10
-    """
+    '''
+        .---14
+    .---12
+ ---10     `---11
+    |          `----10
+    |     .---4
+    `---3
 
+    '''
     iter:Iterator = c.newIterator()
 
     while(iter.hasNext()):
