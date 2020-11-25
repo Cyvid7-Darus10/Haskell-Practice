@@ -120,8 +120,9 @@ def main():
     c = MyBTree(10, MyBTree(3, right=MyBTree(4)), MyBTree(
         12, MyBTree(11, left=MyBTree(10)), MyBTree(14)))
 
+#The Binary Tree
     """
-            10
+             10
             /  \
            /    \ 
           3     12
