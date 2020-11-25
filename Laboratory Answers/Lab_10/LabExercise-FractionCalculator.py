@@ -85,19 +85,23 @@ class Calculation:
         return str(self.__left) + " " + str(self.__operation) + " " + str(self.__right) + " = " + str(self.__answer)
 
 
-f1: Fraction = Fraction(0,4)
-f2: Fraction = Fraction(2,5)
-f3: Fraction = Fraction(0,1)
-f4: Fraction = Fraction(15,5)
-f5: Fraction = Fraction(30,6)
+def main():
+    f1: Fraction = Fraction(0,4)
+    f2: Fraction = Fraction(2,5)
+    f3: Fraction = Fraction(0,1)
+    f4: Fraction = Fraction(15,5)
+    f5: Fraction = Fraction(30,6)
 
-print(Calculation(f1,f3,Addition()))
-print(Calculation(f2,f1,Subtraction()))
-print(Calculation(f2,f1,Multiplication()))
-print(Calculation(f3,f2,Multiplication()))
+    print(Calculation(f1,f3,Addition()))
+    print(Calculation(f2,f1,Subtraction()))
+    print(Calculation(f2,f1,Multiplication()))
+    print(Calculation(f3,f2,Multiplication()))
 
-print(Calculation(f4,f5,Addition()))
-print(Calculation(f4,f5,Subtraction()))
-print(Calculation(f4,f5,Division()))
-print(Calculation(f4,f5,Multiplication()))
-# print(Calculation(f3,f1,Division())) // undefined
+    print(Calculation(f4,f5,Addition()))
+    print(Calculation(f4,f5,Subtraction()))
+    print(Calculation(f4,f5,Division()))
+    print(Calculation(f4,f5,Multiplication()))
+    # print(Calculation(f3,f1,Division())) // undefined
+
+if __name__ == "__main__":
+    main()

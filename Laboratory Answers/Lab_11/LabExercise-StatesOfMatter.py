@@ -87,12 +87,15 @@ class Matter:
     def __str__(self):
         return "%s is currently a %s" % (self.__name, self.__state) #formatting strings just like you format strings in C
 
+def main():
+    a = Matter("Water")
+    print (a)
+    a.compress()
+    print (a)
+    a.heat()
+    print (a)
+    a.heat()
+    print (a)
 
-a = Matter("Water")
-print (a)
-a.compress()
-print (a)
-a.heat()
-print (a)
-a.heat()
-print (a)
+if __name__ == "__main__":
+    main()
