@@ -54,9 +54,10 @@ def main():
 
     '''
     Controls:
-        w
+          w
         a s d 
     '''
+    
     while True:
         clear()
         print(b)
