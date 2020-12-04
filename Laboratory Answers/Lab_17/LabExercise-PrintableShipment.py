@@ -82,3 +82,28 @@ class ExpressDelivery(Delivery):
 class ExpressShipment(Shipment):
     def delivery(self,location) -> Delivery:
         return ExpressDelivery(location)
+
+
+class Printable(ABC):
+    @abstractmethod
+    def __str__(self) -> str:
+        pass
+
+class PrintableShipment(Printable):
+    def __init__(self, shipment: Shipment):
+        self.__shipment = shipment
+
+    def __str__(self) -> str:
+        return self.__shipment.shipmentDetails()
+
+def main():
+    o = [Order("Surface Pro 7",40000),Order("Zzzquil",900)]
+    s = Shipment(o,date(2019,11,1),"Cebu City")
+    v = ExpressShipment(o,date(2019,11,1),"Cebu City")
+
+    print(PrintableShipment(s))
+    print(PrintableShipment(v))
+
+    
+if __name__ == "__main__":
+    main()

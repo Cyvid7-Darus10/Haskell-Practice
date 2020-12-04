@@ -60,14 +60,25 @@ class MinimumSearchAlgorithm(SearchAlgorithm):
         self._solutions[0] = candidate
 
 def main():
+<<<<<<< HEAD
     test1 = MinimumSearchAlgorithm(None, [-1,12,23,34,-1,-2,12,0,12,10,9,-3,4,5,3])
     print(test1.bruteForceSolution())
 
     test2 = DivisibilitySearchAlgorithm(3, [12,12,23,34,12,10,9,5,4,5,3])
+=======
+    test1 = MinimumSearchAlgorithm(None, [-1,12,23,34,12,10,9,-3,4,5,3])
+    print(test1.bruteForceSolution())
+
+    test2 = DivisibilitySearchAlgorithm(2, [12,12,23,34,12,10,9,5,4,5,3])
+>>>>>>> 255265fc07b0e7062bc98c4d90158a14421bdfef
     print(test2.bruteForceSolution())
 
     test2 = EqualitySearchAlgorithm(12, [12,12,23,34,12,10,9,5,4,5,3])
     print(test2.bruteForceSolution())
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     main()
+=======
+    main()
+>>>>>>> 255265fc07b0e7062bc98c4d90158a14421bdfef

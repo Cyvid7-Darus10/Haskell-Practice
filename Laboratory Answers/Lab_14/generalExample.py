@@ -17,7 +17,7 @@ class Template(ABC):
 
     def templateMethod(self):
         self.step1()
-        for i in range(3):
+        for _ in range(3):
             self.step2()
         self.step3()
         self.step4()

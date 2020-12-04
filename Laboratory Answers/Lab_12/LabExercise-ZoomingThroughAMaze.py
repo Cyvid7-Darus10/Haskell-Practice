@@ -3,17 +3,27 @@ from board import Board
 from commands import DashUpCommand,DashLeftCommand,DashDownCommand,DashRightCommand
 import getch
 
+<<<<<<< HEAD
 '''
 Controls:
  d     w
     a s d 
 '''
 
+=======
+>>>>>>> 255265fc07b0e7062bc98c4d90158a14421bdfef
 def clear(): 
     # for windows 
     if name == 'nt': 
         _ = system('cls') 
   
+<<<<<<< HEAD
+=======
+    # for mac and linux(here, os.name is 'posix') 
+    else: 
+        _ = system('clear') 
+
+>>>>>>> 255265fc07b0e7062bc98c4d90158a14421bdfef
 class Controller:
     def __init__(self,board:Board):
         self.__board = board
