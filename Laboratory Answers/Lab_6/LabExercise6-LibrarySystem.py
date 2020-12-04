@@ -20,7 +20,7 @@ class Date:
                 + "/" + str(self.__day) 
                 + "/" + str(self.__year))
 
-    def daysGap(self, today: Date) -> int:
+    def daysGap(self, today) -> int:
         months:[int] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         days:[int] = (today.__year - self.__year)* 365
 
@@ -48,8 +48,8 @@ class BorrowableItem(ABC):
 
 
 class Book(BorrowableItem):
-    def __init__(self, bookId:int, title:str, 
-                author:str, publishDate:Date, pages:[Page]):
+    def __init__(self, bookId: int, title: str, 
+                author: str, publishDate: Date, pages: [Page]):
         self.__bookId = bookId
         self.__title = title
         self.__publishDate = publishDate
@@ -67,7 +67,7 @@ class Book(BorrowableItem):
 
 
 class Periodical(BorrowableItem):
-    def __init__(self, periodicalID:int, title:str, issue:Date, pages:[Page]):
+    def __init__(self, periodicalID: int, title: str, issue: Date, pages: [Page]):
         self.__periodicalID = periodicalID
         self.__title = title
         self.__issue = issue
@@ -81,7 +81,7 @@ class Periodical(BorrowableItem):
 
 
 class PC(BorrowableItem):
-    def __init__(self, pcID:int):
+    def __init__(self, pcID: int):
         self.__pcID = pcID
     
     def uniqueItemId(self) -> int:
@@ -98,11 +98,11 @@ class LibraryCard:
         self.__name = name
         self.__borrowedItems = borrowedItems
     
-    def borrowItem(self, item:BorrowableItem, date:Date):
+    def borrowItem(self, item: BorrowableItem, date: Date):
         self.__borrowedItems[item] = date
     
     def borrowerReport(self) -> str:
-        r:str = self.__name + "\n"
+        r: str = self.__name + "\n"
         
         for borrowedItem in self.__borrowedItems:
             r += (borrowedItem.commonName() 
@@ -112,11 +112,11 @@ class LibraryCard:
 
         return r
     
-    def returnItem(self, b:BorrowableItem):
+    def returnItem(self, b: BorrowableItem):
         if b in self.__borrowedItems:
             self.__borrowedItems.pop(b)
     
-    def penalty(self, b:BorrowableItem, today:Date) -> float:
+    def penalty(self, b: BorrowableItem, today:Date) -> float:
         if b in self.__borrowedItems:
             days:float = float(self.__borrowedItems[b].daysGap(today))
             if isinstance(b, PC):
@@ -125,7 +125,7 @@ class LibraryCard:
                 return (days - 7.0) * 3.5 if days - 7.0 > 0 else 0
             return (days - 1.0) * 3.5 if days - 1.0 > 0 else 0      #Periodical
     
-    def itemDue(self, today:Date) -> [BorrowableItem]:
+    def itemDue(self, today: Date) -> [BorrowableItem]:
         dueItems:[BorrowableItem] = []
 
         for item in self.__borrowedItems:
@@ -134,8 +134,8 @@ class LibraryCard:
 
         return dueItems
     
-    def totalPenalty(self, today:Date) -> float:
-        total:float = 0.0
+    def totalPenalty(self, today: Date) -> float:
+        total: float = 0.0
 
         for item in self.__borrowedItems:
             total += self.penalty(item, today)
@@ -144,18 +144,18 @@ class LibraryCard:
 
 
 b:BorrowableItem = Book(10991,"Corpus Hermeticum", "Hermes Trismegistus", Date(9,1,1991), [])
-print(b.commonName()) #commonName() returns the string representation of a borrowable item
+Asus:BorrowableItem = PC(1234)
+magazine:BorrowableItem = Periodical(12, "Geographic", Date(9,27,2019), [])
+
+# print(b.commonName()) #commonName() returns the string representation of a borrowable item
+
 l:LibraryCard = LibraryCard(9982,"Rubelito Abella",{})
 l.borrowItem(b,Date(1,22,2019))
-
-Asus:BorrowableItem = PC(1234)
-
-magazine:BorrowableItem = Periodical(12, "Geographic", Date(9,27,2019), [])
 l.borrowItem(magazine, Date(1,2,2019))
+print(l.borrowerReport())
 
-print(l.borrowerReport())
-print(l.penalty(b, Date(10,22,2019)))
-print(l.itemDue(Date(9,26,2020)))
-print(l.penalty(Asus, Date(10,22,2019)))
-l.returnItem(b)
-print(l.borrowerReport())
+# print(l.penalty(b, Date(10,22,2019)))
+# print(l.itemDue(Date(9,26,2020)))
+# print(l.penalty(Asus, Date(10,22,2019)))
+# l.returnItem(b)
+# print(l.borrowerReport())
