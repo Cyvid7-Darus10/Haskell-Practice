@@ -7,7 +7,7 @@
   ------------------------------
 -}
 
-------=---------Easy Functions-------------------
+---------------Easy Functions-------------------
 -- Consumes an integer and produces the cube of that integer
 cube :: Int -> Int
 cube n = n * n * n
